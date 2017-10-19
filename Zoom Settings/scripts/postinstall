@@ -1,4 +1,0 @@
-#!/bin/bash
-
-touch /var/log/zoom-reset.log
-chmod 777 /var/log/zoom-reset.log
