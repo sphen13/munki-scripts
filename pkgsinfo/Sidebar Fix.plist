@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>OnDemand</key>
+	<true/>
+	<key>autoremove</key>
+	<false/>
+	<key>catalogs</key>
+	<array>
+		<string>production</string>
+	</array>
+	<key>category</key>
+	<string>SelfService</string>
+	<key>description</key>
+	<string>Resets the Finder and Open/Save Sidebar</string>
+	<key>developer</key>
+	<string>TR</string>
+	<key>display_name</key>
+	<string>Sidebar Fix</string>
+	<key>installer_type</key>
+	<string>nopkg</string>
+	<key>minimum_os_version</key>
+	<string>10.4.0</string>
+	<key>name</key>
+	<string>Sidebar Fix</string>
+	<key>postinstall_script</key>
+	<string>#!/bin/bash
+currentuser=$(defaults read /Library/Preferences/com.apple.loginwindow.plist lastUserName)
+echo ""
+echo "====== Purging Finder Prefs Cache ======"
+find /Users/"$currentuser"/Library/Preferences/com.apple.finder.plist* -exec rm -vf {} \;
+killall cfprefsd
+sleep 1
+killall Finder
+exit 0
+</string>
+	<key>version</key>
+	<string>1.0</string>
+</dict>
+</plist>
