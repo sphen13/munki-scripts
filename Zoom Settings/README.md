@@ -1,4 +1,4 @@
-### Zoom Settings
+# Zoom Settings
 
 One of our scripts that helps you use a shared computer resource for Zoom meetings.
 

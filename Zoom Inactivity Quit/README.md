@@ -1,4 +1,4 @@
-### Zoom Inactivity Quit
+# Zoom Inactivity Quit
 
 One of our scripts that helps you use a shared computer resource for Zoom meetings.
 
