@@ -1,0 +1,6 @@
+#!/bin/sh
+
+launchctl unload /Library/LaunchAgents/com.related.Logout.plist
+launchctl load /Library/LaunchAgents/com.related.Logout.plist
+
+exit 0
