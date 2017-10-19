@@ -1,0 +1,3 @@
+#!/bin/bash
+launchctl unload -w /Library/LaunchDaemons/block_osx_install.plist
+launchctl load -w /Library/LaunchDaemons/block_osx_install.plist

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>OnDemand</key>
+	<true/>
+	<key>autoremove</key>
+	<false/>
+	<key>catalogs</key>
+	<array>
+		<string>production</string>
+	</array>
+	<key>category</key>
+	<string>SelfService</string>
+	<key>description</key>
+	<string>Purges local MacPractice cache</string>
+	<key>developer</key>
+	<string>TR</string>
+	<key>display_name</key>
+	<string>MacPractice Cleaner</string>
+	<key>installer_type</key>
+	<string>nopkg</string>
+	<key>minimum_os_version</key>
+	<string>10.4.0</string>
+	<key>name</key>
+	<string>MacPractice Cleaner</string>
+	<key>postinstall_script</key>
+	<string>#!/bin/bash
+currentuser=$(defaults read /Library/Preferences/com.apple.loginwindow.plist lastUserName)
+echo ""
+echo "======Purging MacPractice Cache ======"
+rm -vrf "/Users/$currentuser/Library/Application Support/MacPracticeClient"
+exit 0
+</string>
+	<key>version</key>
+	<string>1.0</string>
+	<key>blocking_applications</key>
+	<array>
+		<string>MacPractice MD</string>
+	</array>
+</dict>
+</plist>
