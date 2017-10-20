@@ -9,4 +9,6 @@
 
 # Set Microsoft Outlook as the default contacts program
 
-/usr/local/bin/duti -s com.microsoft.outlook vcf allexit 0
+/usr/local/bin/duti -s com.microsoft.outlook vcf all
+
+exit 0

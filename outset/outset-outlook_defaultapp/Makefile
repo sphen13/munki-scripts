@@ -1,5 +1,5 @@
 PKGTITLE="outset-outlook_defaultapp"
-PKGVERSION="1.0.1"
+PKGVERSION="1.0.2"
 PKGID=com.github.outset.outlook_defaultapp
 PROJECT="outset-outlook_defaultapp"
 
@@ -12,8 +12,8 @@ help:
 ##  clean - Clean up temporary working directories
 clean:
 	rm -f ./outset*.pkg
-	rm -f ./pkgroot/usr/local/outset/*/*.pyc
+	rm -f ./pkgroot/usr/local/outset/on-demand/*.pyc
 
 ##  pkg - Create a package using pkgbuild
 pkg: clean
-	pkgbuild --root pkgroot --identifier ${PKGID} --version ${PKGVERSION} --ownership recommended ./${PKGTITLE}-${PKGVERSION}.pkg
+	pkgbuild --root pkgroot --scripts scripts --identifier ${PKGID} --version ${PKGVERSION} --ownership recommended ./${PKGTITLE}-${PKGVERSION}.pkg
