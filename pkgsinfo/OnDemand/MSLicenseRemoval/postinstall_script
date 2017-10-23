@@ -1,0 +1,74 @@
+#!/bin/sh
+
+# modified script from https://go.microsoft.com/fwlink/?linkid=849815 to work within munki as current user
+currentUser=`stat -f "%Su" /dev/console`
+currentHome=`sudo -u $currentUser env | grep HOME | cut -d'=' -f2`
+
+/usr/bin/logger "Starting Office 2016 License Removal"
+curl https://officecdn-microsoft-com.akamaized.net/pr/C1297A47-86C4-4C1F-97FA-950631F94777/OfficeMac/LRT-Start.txt
+PERPLICENSE="/Library/Preferences/com.microsoft.office.licensingV2.plist"
+PERPLICENSEBACKUP="/Library/Preferences/com.microsoft.office.licensingV2.Backup"
+O365SUBMAIN="$currentHome/Library/Group Containers/UBF8T346G9.Office/com.microsoft.Office365.plist"
+O365SUBBAK1="$currentHome/Library/Group Containers/UBF8T346G9.Office/com.microsoft.e0E2OUQxNUY1LTAxOUQtNDQwNS04QkJELTAxQTI5M0JBOTk4O.plist"
+O365SUBBAK2="$currentHome/Library/Group Containers/UBF8T346G9.Office/e0E2OUQxNUY1LTAxOUQtNDQwNS04QkJELTAxQTI5M0JBOTk4O"
+O365SUBMAINB="$currentHome/Library/Group Containers/UBF8T346G9.Office/com.microsoft.Office365V2.plist"
+O365SUBBAK1B="$currentHome/Library/Group Containers/UBF8T346G9.Office/com.microsoft.O4kTOBJ0M5ITQxATLEJkQ40SNwQDNtQUOxATL1YUNxQUO2E0e.plist"
+O365SUBBAK2B="$currentHome/Library/Group Containers/UBF8T346G9.Office/O4kTOBJ0M5ITQxATLEJkQ40SNwQDNtQUOxATL1YUNxQUO2E0e"
+
+# Remove the Perpetual/Volume License from the computer
+if [ -f "$PERPLICENSE" ]
+then
+	/usr/bin/logger "Detected $PERPLICENSE file"
+	/usr/bin/sudo mv -f "$PERPLICENSE" "$PERPLICENSEBACKUP"
+	/usr/bin/logger "Removed $PERPLICENSE file"
+	curl https://officecdn-microsoft-com.akamaized.net/pr/C1297A47-86C4-4C1F-97FA-950631F94777/OfficeMac/LRT-VL.txt
+else
+	/usr/bin/logger "Did NOT detect $PERPLICENSE file"
+fi
+
+if ! [[ $COMMAND_LINE_INSTALL && $COMMAND_LINE_INSTALL != 0 ]]
+then
+	# Remove the Office 365 Subscription License if we're running from the installer UI
+	if [ -f "$O365SUBMAIN" ] || [ -f "$O365SUBBAK1" ] || [ -f "$O365SUBBAK2" ] || [ -f "$O365SUBMAINB" ] || [ -f "$O365SUBBAK1B" ] || [ -f "$O365SUBBAK2B" ]
+	then
+		/usr/bin/logger "Detected Office 365 Subscription License file"
+ 		/usr/bin/sudo -u $currentUser rm -f "$O365SUBMAIN"
+		/usr/bin/sudo -u $currentUser rm -f "$O365SUBBAK1"
+		/usr/bin/sudo -u $currentUser rm -f "$O365SUBBAK2"
+ 		/usr/bin/sudo -u $currentUser rm -f "$O365SUBMAINB"
+		/usr/bin/sudo -u $currentUser rm -f "$O365SUBBAK1B"
+		/usr/bin/sudo -u $currentUser rm -f "$O365SUBBAK2B"
+		/usr/bin/logger "Removed all Office 365 Subscription License files"
+		curl https://officecdn-microsoft-com.akamaized.net/pr/C1297A47-86C4-4C1F-97FA-950631F94777/OfficeMac/LRT-Sub.txt
+	else
+		/usr/bin/logger "Did NOT detect Office 365 Subscription License file"
+	fi
+fi
+
+# Remove any keychain entries for Office
+/usr/bin/sudo -u $currentUser /usr/bin/security delete-internet-password -s 'msoCredentialSchemeADAL'
+/usr/bin/sudo -u $currentUser /usr/bin/security delete-internet-password -s 'msoCredentialSchemeLiveId'
+/usr/bin/sudo -u $currentUser /usr/bin/security delete-generic-password -l 'Microsoft Office Identities Settings 2'
+/usr/bin/sudo -u $currentUser /usr/bin/security delete-generic-password -l 'Microsoft Office Identities Cache 2'
+
+# Remove the Belongs To information
+/usr/bin/sudo -u $currentUser /usr/bin/defaults delete com.microsoft.office OfficeActivationEmailAddress
+
+# Reset the first run experience for each licensed app
+/usr/bin/sudo -u $currentUser /usr/bin/defaults write com.microsoft.Word kSubUIAppCompletedFirstRunSetup1507 -bool FALSE
+/usr/bin/sudo -u $currentUser /usr/bin/defaults write com.microsoft.Excel kSubUIAppCompletedFirstRunSetup1507 -bool FALSE
+/usr/bin/sudo -u $currentUser /usr/bin/defaults write com.microsoft.Powerpoint kSubUIAppCompletedFirstRunSetup1507 -bool FALSE
+/usr/bin/sudo -u $currentUser /usr/bin/defaults write com.microsoft.Outlook FirstRunExperienceCompletedO15 -bool FALSE
+/usr/bin/logger "Set apps back to first run state"
+
+# Restart the CFPreferences daemon to ensure that all caches are flushed
+/usr/bin/killall cfprefsd
+/usr/bin/logger "Terminated all instances of CFPrefsd"
+
+# Forget volume license pkg if it was installed previously
+/usr/sbin/pkgutil --forget com.microsoft.pkg.licensing.volume
+
+/usr/bin/logger "Completed Office 2016 License Removal"
+curl https://officecdn-microsoft-com.akamaized.net/pr/C1297A47-86C4-4C1F-97FA-950631F94777/OfficeMac/LRT-End.txt
+
+exit 0
