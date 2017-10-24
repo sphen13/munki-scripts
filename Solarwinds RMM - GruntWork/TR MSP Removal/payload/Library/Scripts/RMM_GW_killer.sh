@@ -37,7 +37,7 @@ pkgutil --forget com.mac-msp.gruntwork.munkihelpers
 pkgutil --forget com.rmm.advancedMonitoringAgent.AdvancedMonitoringAgent.pkg
 pkgutil --forget com.rmm.advancedMonitoringAgent.rmmagent.pkg
 pkgutil --forget killmunkigwrmm
-pkgutil --forget com.trmacs.TRMDMRemoval
+pkgutil --forget com.trmacs.TRMSPRemoval
 
 # remove traces of ourself
 rm -f /Library/LaunchDaemons/RMM_GW_killer.plist

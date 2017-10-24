@@ -1,6 +1,6 @@
-# Zoom Settings
+# RMM GW Killer _aka_ TR MSP Removal
 
-Package to manually remove Solarwinds RMM / Mac-MSP GruntWork / Munki / Watchman Monitoring
+Package to manually remove Solarwinds RMM / Mac-MSP GruntWork / Munki
 
 Although we have an automated way to trigger all these tasks it is sometimes necessary to remove all these components manually.  This is the sledgehammer.
 
