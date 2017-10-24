@@ -15,3 +15,9 @@ Causes munkipkg to build the package defined in package_project_directory. The b
 ## Please Note
 
 This has been tested on 10.12.6 and Java 8 Update 144
+
+## Mentions
+
+Props to @foigus for these two posts:
+https://foigus.wordpress.com/2015/02/20/managing-java-7-and-8-updates/
+https://foigus.wordpress.com/2015/03/15/disabling-java-8-sponsor-offer-installation/
