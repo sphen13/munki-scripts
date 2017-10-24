@@ -1,0 +1,3 @@
+## Solarwinds RMM - GruntWork
+
+Collection of Solarwinds RMM / Mac-MSP GruntWork stuff...

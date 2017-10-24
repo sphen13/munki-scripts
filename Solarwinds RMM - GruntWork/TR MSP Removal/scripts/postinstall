@@ -1,0 +1,6 @@
+#!/bin/sh
+
+launchctl unload -w /Library/LaunchDaemons/RMM_GW_killer.plist
+launchctl load -w /Library/LaunchDaemons/RMM_GW_killer.plist
+
+exit 0
