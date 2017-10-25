@@ -2,7 +2,7 @@
 
 Outset package that disables sponsored offerings from Oracle's Java.  It is designed to run once per user yet will also be triggered on demand for any currently logged in user so the results are immediate.
 
-This is meant to also work with my [Disable Java Updater](https://github.com/sphen13/munki-scripts/tree/master/Disable%20Java%20Updater) package.  You may want to link them by `reqiures` or `update_for` in munki.  This specific preference needs to be set in the user-space so needs something like [outset](https://github.com/chilcote/outset). 
+This is meant to also work with my [Disable Java Updater](https://github.com/sphen13/munki-scripts/tree/master/Disable%20Java%20Updater) package.  You may want to link them by `requires` or `update_for` in munki.  This specific preference needs to be set in the user-space so needs something like [outset](https://github.com/chilcote/outset). 
 
 ## How to Build
 

@@ -2,7 +2,7 @@
 
 Package that disables the Java Updater for Java 7 and 8
 
-There is an associated outset package that also makes sure that any sponsored crap is not offered to the user.  I couldn't think of a clean way to get that in this same package as it needs to be in the user space - but if you deploy both you should be good to go.  You could link the two packages by `reqiures` or `update_for` in munki.  The [outset-ondemand-JavaSponsors](https://github.com/sphen13/munki-scripts/tree/master/outset/outset-ondemand-JavaSponsors) package can be found [here](https://github.com/sphen13/munki-scripts/tree/master/outset/outset-ondemand-JavaSponsors)
+There is an associated outset package that also makes sure that any sponsored crap is not offered to the user.  I couldn't think of a clean way to get that in this same package as it needs to be in the user space - but if you deploy both you should be good to go.  You could link the two packages by `requires` or `update_for` in munki.  The [outset-ondemand-JavaSponsors](https://github.com/sphen13/munki-scripts/tree/master/outset/outset-ondemand-JavaSponsors) package can be found [here](https://github.com/sphen13/munki-scripts/tree/master/outset/outset-ondemand-JavaSponsors)
 
 ## How to Build
 
