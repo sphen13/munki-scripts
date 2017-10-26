@@ -26,10 +26,11 @@ pkgutil --forget com.googlecode.munki.core
 pkgutil --forget com.googlecode.munki.launchd
 pkgutil --forget com.github.munkireport
 
-# ensure gruntwork is really unloaded
+# ensure gruntwork is really unloaded & clean up
 launchctl remove com.mac-msp.gruntwork.munkitamer
 launchctl remove com.mac-msp.gruntwork.chief
 launchctl remove com.mac-msp.gruntwork.background
+rm -rf /Library/Mac-MSP/Gruntwork
 
 # forget the pkg receipts
 pkgutil --forget com.mac-msp.gruntwork
