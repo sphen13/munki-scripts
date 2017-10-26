@@ -12,6 +12,8 @@ This package utilizes [munkipkg](https://github.com/munki/munki-pkg).
 
 Causes munkipkg to build the package defined in package_project_directory. The built package is created in a build/ directory inside the project directory.
 
+There is an example _pkginfo_ file [here](https://github.com/sphen13/munki-scripts/blob/master/Kill%20ParentalControls/for%20munki/KillParentalControls-1.0.plist).
+
 ## Please Note
 
 Dont judge me. :)

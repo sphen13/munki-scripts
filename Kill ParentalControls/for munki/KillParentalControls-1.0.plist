@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>_metadata</key>
+	<dict>
+		<key>created_by</key>
+		<string>sphen</string>
+		<key>creation_date</key>
+		<date>2017-10-24T22:51:26Z</date>
+		<key>munki_version</key>
+		<string>3.1.0.3430</string>
+		<key>os_version</key>
+		<string>10.12.6</string>
+	</dict>
+	<key>autoremove</key>
+	<true/>
+	<key>catalogs</key>
+	<array>
+		<string>testing</string>
+	</array>
+	<key>category</key>
+	<string></string>
+	<key>description</key>
+	<string></string>
+	<key>developer</key>
+	<string></string>
+	<key>display_name</key>
+	<string>parentalcontrolsd Fixer</string>
+	<key>installed_size</key>
+	<integer>3</integer>
+	<key>installer_item_hash</key>
+	<string>c92c10310bed8a267dbd49b4d5518a4d4251dc1707670583198cc4d133ce41cf</string>
+	<key>installer_item_location</key>
+	<string>KillParentalControls-1.0.pkg</string>
+	<key>installer_item_size</key>
+	<integer>4</integer>
+	<key>minimum_os_version</key>
+	<string>10.5.0</string>
+	<key>name</key>
+	<string>KillParentalControls</string>
+	<key>receipts</key>
+	<array>
+		<dict>
+			<key>installed_size</key>
+			<integer>3</integer>
+			<key>packageid</key>
+			<string>com.github.munki.pkg.KillParentalControls</string>
+			<key>version</key>
+			<string>1.0</string>
+		</dict>
+	</array>
+	<key>unattended_install</key>
+	<true/>
+	<key>unattended_uninstall</key>
+	<true/>
+	<key>uninstall_method</key>
+	<string>uninstall_script</string>
+	<key>uninstall_script</key>
+	<string>#!/bin/bash
+
+launchctl unload -w /Library/LaunchDaemons/kill_parentalcontolsd.plist
+rm -f /Library/LaunchDaemons/kill_parentalcontolsd.plist
+rm -f /Library/Scripts/kill_parentalcontolsd.sh
+/usr/sbin/pkgutil --forget com.github.munki.pkg.KillParentalControls</string>
+	<key>uninstallable</key>
+	<true/>
+	<key>version</key>
+	<string>1.0</string>
+</dict>
+</plist>

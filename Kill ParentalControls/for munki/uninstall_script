@@ -1,0 +1,6 @@
+#!/bin/bash
+
+launchctl unload -w /Library/LaunchDaemons/kill_parentalcontolsd.plist
+rm -f /Library/LaunchDaemons/kill_parentalcontolsd.plist
+rm -f /Library/Scripts/kill_parentalcontolsd.sh
+/usr/sbin/pkgutil --forget com.github.munki.pkg.KillParentalControls
