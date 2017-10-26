@@ -1,0 +1,14 @@
+#!/bin/bash
+
+# remove mandated pref files
+
+rm -f /Library/Application Support/Adobe/OOBE/Configs/ServiceConfig.xml
+rm -f /Library/Application Support/Adobe/AAMUpdaterInventory/1.0/AdobeUpdaterAdminPrefs.dat
+
+# kill the creative cloud app if a user is logged in
+
+CurrentUser=`/usr/bin/who | awk '/console/{ print $1 }'`
+if [ ! -z "$CurrentUser" ]; then
+	/usr/bin/sudo -u "$CurrentUser" /usr/bin/killall "Creative Cloud"
+fi
+exit 0

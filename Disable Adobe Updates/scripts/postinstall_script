@@ -1,0 +1,9 @@
+#!/bin/bash
+
+# kill the creative cloud app if a user is logged in
+
+CurrentUser=`/usr/bin/who | awk '/console/{ print $1 }'`
+if [ ! -z "$CurrentUser" ]; then
+	/usr/bin/sudo -u "$CurrentUser" /usr/bin/killall "Creative Cloud"
+fi
+exit 0

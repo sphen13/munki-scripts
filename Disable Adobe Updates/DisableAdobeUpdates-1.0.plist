@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>_metadata</key>
+	<dict>
+		<key>created_by</key>
+		<string>sphen</string>
+		<key>creation_date</key>
+		<date>2017-10-25T17:25:27Z</date>
+		<key>munki_version</key>
+		<string>3.1.0.3430</string>
+		<key>os_version</key>
+		<string>10.12.6</string>
+	</dict>
+	<key>autoremove</key>
+	<false/>
+	<key>catalogs</key>
+	<array>
+		<string>testing</string>
+	</array>
+	<key>installer_item_hash</key>
+	<string>95453497363e554a99b2eff678ef386ef220e15954c67fd75c6d096e597b6552</string>
+	<key>installer_item_location</key>
+	<string>DisableAdobeUpdates.dmg</string>
+	<key>installer_item_size</key>
+	<integer>27</integer>
+	<key>installer_type</key>
+	<string>copy_from_dmg</string>
+	<key>installs</key>
+	<array>
+		<dict>
+			<key>md5checksum</key>
+			<string>9924ce7c138697b3b909bfbe28c41dd5</string>
+			<key>path</key>
+			<string>/Library/Application Support/Adobe/AAMUpdaterInventory/1.0/AdobeUpdaterAdminPrefs.dat</string>
+			<key>type</key>
+			<string>file</string>
+		</dict>
+		<dict>
+			<key>md5checksum</key>
+			<string>984ef890a3be2cb87114dd8995c2a254</string>
+			<key>path</key>
+			<string>/Library/Application Support/Adobe/OOBE/Configs/ServiceConfig.xml</string>
+			<key>type</key>
+			<string>file</string>
+		</dict>
+	</array>
+	<key>items_to_copy</key>
+	<array>
+		<dict>
+			<key>destination_path</key>
+			<string>/Library/Application Support/Adobe/AAMUpdaterInventory/1.0</string>
+			<key>source_item</key>
+			<string>AdobeUpdaterAdminPrefs.dat</string>
+		</dict>
+		<dict>
+			<key>destination_path</key>
+			<string>/Library/Application Support/Adobe/OOBE/Configs</string>
+			<key>source_item</key>
+			<string>ServiceConfig.xml</string>
+		</dict>
+	</array>
+	<key>minimum_os_version</key>
+	<string>10.4.0</string>
+	<key>name</key>
+	<string>DisableAdobeUpdates</string>
+	<key>uninstall_method</key>
+	<string>uninstall_script</string>
+	<key>uninstall_script</key>
+	<string>#!/bin/bash
+
+# remove mandated pref files
+
+rm -f /Library/Application Support/Adobe/OOBE/Configs/ServiceConfig.xml
+rm -f /Library/Application Support/Adobe/AAMUpdaterInventory/1.0/AdobeUpdaterAdminPrefs.dat
+
+# kill the creative cloud app if a user is logged in
+
+CurrentUser=`/usr/bin/who | awk '/console/{ print $1 }'`
+if [ ! -z "$CurrentUser" ]; then
+	/usr/bin/sudo -u "$CurrentUser" /usr/bin/killall "Creative Cloud"
+fi
+exit 0</string>
+	<key>uninstallable</key>
+	<true/>
+	<key>postinstall_script</key>
+	<string>#!/bin/bash
+
+# kill the creative cloud app if a user is logged in
+
+CurrentUser=`/usr/bin/who | awk '/console/{ print $1 }'`
+if [ ! -z "$CurrentUser" ]; then
+	/usr/bin/sudo -u "$CurrentUser" /usr/bin/killall "Creative Cloud"
+fi
+exit 0</string>
+	<key>version</key>
+	<string>1.0</string>
+	<key>unattended_install</key>
+	<true/>
+	<key>unattended_uninstall</key>
+	<true/>
+</dict>
+</plist>
+
