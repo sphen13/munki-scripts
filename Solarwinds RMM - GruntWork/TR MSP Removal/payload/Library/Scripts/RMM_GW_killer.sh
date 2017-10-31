@@ -32,6 +32,18 @@ launchctl remove com.mac-msp.gruntwork.chief
 launchctl remove com.mac-msp.gruntwork.background
 rm -rf /Library/Mac-MSP/Gruntwork
 
+# remove MSP Anywhere
+launchctl unload -w /Library/LaunchAgents/MSPAnywhere*
+launchctl unload -w /Library/LaunchDaemons/MSPAnywhere*
+rm -f /Library/LaunchAgents/MSPAnywhere*
+rm -f /Library/LaunchDaemons/MSPAnywhere*
+rm -rf /Applications/MSP\ Anywhere\ Agent*
+rm -rf /Library/PrivilegedHelperTools/MSP\ Anywhere\ Agent*
+rm -rf /Library/MSP\ Anywhere\ Agent*
+find /Users/*/Documents -name "MSP Anywhere Files" -maxdepth 1 -exec rm -rf {} \;
+/usr/bin/killall "MSP Anywhere Service Configurator"
+/usr/bin/killall "MSP Anywhere Agent"
+
 # forget the pkg receipts
 pkgutil --forget com.mac-msp.gruntwork
 pkgutil --forget com.mac-msp.gruntwork.munkihelpers
