@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>_metadata</key>
+	<dict>
+		<key>created_by</key>
+		<string>sphen</string>
+		<key>creation_date</key>
+		<date>2017-11-07T12:34:26Z</date>
+		<key>munki_version</key>
+		<string>3.1.0.3430</string>
+		<key>os_version</key>
+		<string>10.12.6</string>
+	</dict>
+	<key>autoremove</key>
+	<false/>
+	<key>catalogs</key>
+	<array>
+		<string>testing</string>
+	</array>
+	<key>installer_item_hash</key>
+	<string>49ce1de9bdadd1e1c1aa5571da1d3eb98563dca4ba68ef452fa5d0d79044b6fd</string>
+	<key>installer_item_location</key>
+	<string>apps/AdobeCC/AdobeInDesignCC2018 BugFix.dmg</string>
+	<key>installer_item_size</key>
+	<integer>4399</integer>
+	<key>installer_type</key>
+	<string>copy_from_dmg</string>
+	<key>icon_name</key>
+	<string>AdobeInDesignCC2018.png</string>
+	<key>installs</key>
+	<array>
+		<dict>
+			<key>md5checksum</key>
+			<string>c5f5dd1d373f8cfcad8b20e8fe52c422</string>
+			<key>path</key>
+			<string>/Applications/Adobe InDesign CC 2018/Adobe InDesign CC 2018.app/Contents/MacOS/Required/Generic Page Item.InDesignPlugin/Versions/A/Generic Page Item</string>
+			<key>type</key>
+			<string>file</string>
+		</dict>
+		<dict>
+			<key>md5checksum</key>
+			<string>b7dcfdab2cf5b70da187705542cf9e81</string>
+			<key>path</key>
+			<string>/Applications/Adobe InDesign CC 2018/Adobe InDesign CC 2018.app/Contents/MacOS/Required/Links.InDesignPlugin/Versions/A/Links</string>
+			<key>type</key>
+			<string>file</string>
+		</dict>
+		<dict>
+			<key>md5checksum</key>
+			<string>711f8df748aa625f484b257449a828bf</string>
+			<key>path</key>
+			<string>/Applications/Adobe InDesign CC 2018/Adobe InDesign CC 2018.app/Contents/MacOS/Required/PDF.InDesignPlugin/Versions/A/PDF</string>
+			<key>type</key>
+			<string>file</string>
+		</dict>
+		<dict>
+			<key>md5checksum</key>
+			<string>b464884c1b3389f2670c85b2a6e61a86</string>
+			<key>path</key>
+			<string>/Applications/Adobe InDesign CC 2018/Adobe InDesign CC 2018.app/Contents/MacOS/Plug-Ins/Tables/Tables UI.InDesignPlugin/Versions/A/Tables UI</string>
+			<key>type</key>
+			<string>file</string>
+		</dict>
+	</array>
+	<key>items_to_copy</key>
+	<array>
+		<dict>
+			<key>destination_path</key>
+			<string>/Applications/Adobe InDesign CC 2018/Adobe InDesign CC 2018.app/Contents/MacOS/Required</string>
+			<key>source_item</key>
+			<string>Generic Page Item.InDesignPlugin</string>
+		</dict>
+		<dict>
+			<key>destination_path</key>
+			<string>/Applications/Adobe InDesign CC 2018/Adobe InDesign CC 2018.app/Contents/MacOS/Required</string>
+			<key>source_item</key>
+			<string>Links.InDesignPlugin</string>
+		</dict>
+		<dict>
+			<key>destination_path</key>
+			<string>/Applications/Adobe InDesign CC 2018/Adobe InDesign CC 2018.app/Contents/MacOS/Required</string>
+			<key>source_item</key>
+			<string>PDF.InDesignPlugin</string>
+		</dict>
+		<dict>
+			<key>destination_path</key>
+			<string>/Applications/Adobe InDesign CC 2018/Adobe InDesign CC 2018.app/Contents/MacOS/Plug-Ins/Tables</string>
+			<key>source_item</key>
+			<string>Tables UI.InDesignPlugin</string>
+		</dict>
+	</array>
+	<key>minimum_os_version</key>
+	<string>10.4.0</string>
+	<key>name</key>
+	<string>AdobeInDesignCC2018 BugFix</string>
+	<key>uninstallable</key>
+	<false/>
+	<key>unattended_install</key>
+	<true/>
+	<key>version</key>
+	<string>1</string>
+	<key>update_for</key>
+	<array>
+		<string>AdobeInDesignCC2018-13.0</string>
+	</array>
+	<key>blocking_applications</key>
+	<array>
+		<string>Adobe InDesign CC 2018</string>
+	</array>
+</dict>
+</plist>
+
