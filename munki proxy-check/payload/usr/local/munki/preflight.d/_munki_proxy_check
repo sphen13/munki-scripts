@@ -1,0 +1,72 @@
+#!/bin/bash
+
+# set munki to point to local proxy repo if detected by bonjour
+
+expectFile=/tmp/expect
+currentRepo=`defaults read /Library/Preferences/ManagedInstalls SoftwareRepoURL 2>/dev/null`
+alternateRepo=`defaults read /Library/Preferences/ManagedInstalls SoftwareRepoURL2 2>/dev/null`
+
+cat <<EOF > ${expectFile}
+spawn -noecho dns-sd -L proxy _munki._tcp
+expect -timeout 3 eof {}
+EOF
+
+IFS=$'\n'
+mdnsResult=($(cat ${expectFile} | /usr/bin/expect -f - ))
+
+checkforTXT=0
+proxyProtocol="http"
+for (( i=0; i<${#mdnsResult[@]}; i++ )); do
+	if [ "$checkforTXT" -eq "1" ]; then
+		proxyProtocol=`echo ${mdnsResult[i]} | awk '{print $1}' | cut -d '=' -f2`
+		proxyPath=`echo ${mdnsResult[i]} | awk '{print $2}' | cut -d '=' -f2 | tr -d '\r'`
+		# exit loop
+		i=${#mdnsResult[@]}
+	fi
+	line=`echo ${mdnsResult[i]} | grep "reached at"`
+	if [[ ${line} ]]; then
+		location=`echo "${line}" | sed 's/^.*reached at //' | cut -d' ' -f1`
+		# set trigger to check next line for more info
+		checkforTXT=1
+	fi
+done
+
+if [[ ${location} ]]; then
+	# we returned a local proxy location
+	repoURL=${proxyProtocol}://${location}${proxyPath}
+	
+	# check for accessibility
+	proxyThere=`curl -s -S -m 10 "$repoURL"/catalogs/ 2>/dev/null`
+	if [[ "$proxyThere" != *"Forbidden"* ]]; then
+		# local proxy not accessible - lets continue processing below...
+		echo "(munki proxy-check): proxy fails accessibility check..."
+	else
+		# local proxy is accessible
+		echo "(munki proxy-check): proxy accessible!"
+		# check to see if our prefs are already correct or not
+		if [[ ${currentRepo} == ${repoURL} ]]; then
+			echo "(munki proxy-check): no changes to configuration - we are already using local proxy."
+		else
+			# make the config changes
+			defaults write /Library/Preferences/ManagedInstalls SoftwareRepoURL "$repoURL"
+			defaults write /Library/Preferences/ManagedInstalls SoftwareRepoURL2 "$currentRepo"
+			echo "(munki proxy-check): SETTING current repo = $repoURL // failback repo = $currentRepo"
+		fi
+		exit 0
+	fi
+else
+	# no proxy!
+	echo "(munki proxy-check): no proxy server detected."
+fi
+
+# we could be here because a proxy server is no longer detected and we need to fix prefs or that a proxy is failing accessibility checks... or we just dont proxy
+if [[ ${alternateRepo} ]]; then
+	# we have an alternate specified - lets fall-back
+	defaults write /Library/Preferences/ManagedInstalls SoftwareRepoURL "$alternateRepo"
+	defaults delete /Library/Preferences/ManagedInstalls SoftwareRepoURL2
+	echo "(munki proxy-check): SETTING current repo = $alternateRepo // replacing $currentRepo"
+else
+	echo "(munki proxy-check): no changes."
+fi
+
+exit 0
