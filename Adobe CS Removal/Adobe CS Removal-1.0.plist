@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>autoremove</key>
+	<false/>
+	<key>catalogs</key>
+	<array>
+		<string>testing</string>
+	</array>
+	<key>description</key>
+	<string></string>
+	<key>display_name</key>
+	<string>Adobe CS Removal</string>
+	<key>installer_type</key>
+	<string>nopkg</string>
+	<key>minimum_os_version</key>
+	<string>10.6.0</string>
+	<key>name</key>
+	<string>Adobe CS Removal</string>
+	<key>unattended_install</key>
+	<true/>
+	<key>uninstallable</key>
+	<false/>
+	<key>version</key>
+	<string>1.0</string>
+	<key>installcheck_script</key>
+	<string>#!/bin/bash
+# removes old versions of CS/CC
+
+# remove CS
+find /Applications -type d \( -name '*Adobe*' -a -name '*CS*' \) -maxdepth 1 -exec rm -rf {} \;
+find /Applications/Utilities/Adobe\ Installers -type f \( -name '*Adobe*' -a -name '*CS*' \) -maxdepth 1 -exec rm -rf {} \;
+find /Applications/Utilities/Adobe\ Installers -type f \( -name '*Creative Suite*' \) -maxdepth 1 -exec rm -rf {} \;
+
+# remove CC
+find /Applications -type d \( -name '*Adobe*' -a -name '*CC' -a ! -name '*XD*' -a ! -name '*Dimension*' \) -maxdepth 1 -exec rm -rf {} \;
+find /Applications/Utilities/Adobe\ Installers -type f \( -name '*Adobe*' -a -name '*CC' -a ! -name '*XD*' -a ! -name '*Dimension*' \) -maxdepth 1 -exec rm -rf {} \;
+
+#remove CC 2014
+find /Applications -type d \( -name '*Adobe*' -a -name '*2014' \) -maxdepth 1 -exec rm -rf {} \;
+find /Applications/Utilities/Adobe\ Installers -type f \( -name '*Adobe*' -a -name '*2014' \) -maxdepth 1 -exec rm -rf {} \;
+
+#remove CC 2015 (except for Indesign)
+find /Applications -type d \( -name '*Adobe*' -a -name '*2015' -a ! -name '*InDesign*' \) -maxdepth 1 -exec rm -rf {} \;
+find /Applications/Utilities/Adobe\ Installers -type f \( -name '*Adobe*' -a -name '*2015' -a ! -name '*InDesign*' \) -maxdepth 1 -exec rm -rf {} \;
+
+#remove Lightroom 5
+find /Applications -type d \( -name '*Lightroom 5*' \) -maxdepth 1 -exec rm -rf {} \;
+
+exit 1</string>
+</dict>
+</plist>
