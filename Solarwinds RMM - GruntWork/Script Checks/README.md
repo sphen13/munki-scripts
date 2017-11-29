@@ -8,7 +8,7 @@ Patches security flaw in 10.13 which allows any user to login as root with no pa
 
 This does not have to be specific to RMM.
 
-## purge_sus.sh
+### purge_sus.sh
 
 if we are running less than 10.12.6 and have not already run this script previously, fix permissions on /tmp and purge sus cache.
 
