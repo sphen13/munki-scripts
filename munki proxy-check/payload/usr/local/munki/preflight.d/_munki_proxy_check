@@ -1,29 +1,43 @@
 #!/bin/bash
 
 # set munki to point to local proxy repo if detected by bonjour
+# also attempt to set the local softwareupdate process to point to proxy if we pass a test
+# -- needs work
 
 expectFile=/tmp/expect
 currentRepo=`defaults read /Library/Preferences/ManagedInstalls SoftwareRepoURL 2>/dev/null`
 alternateRepo=`defaults read /Library/Preferences/ManagedInstalls SoftwareRepoURL2 2>/dev/null`
+currentSUS=`defaults read /Library/Preferences/com.apple.SoftwareUpdate CatalogURL 2>/dev/null`
+alternateSUS=`defaults read /Library/Preferences/com.apple.SoftwareUpdate.plist CatalogURL2 2>/dev/null`
+if [[ ${currentSUS} ]]; then
+  SUSbranch=`echo "$currentSUS" | cut -d'_' -f2 | sed 's/\(.*\)\.sucatalog/\1/'`
+fi
+userAgent="Darwin/$(uname -a | awk '{ print $3 }' | cut -d'.' -f1)"
 
+# set up expect script for mDNS
 cat <<EOF > ${expectFile}
 spawn -noecho dns-sd -L proxy _munki._tcp
 expect -timeout 3 eof {}
 EOF
 
+# get mDNS results
 IFS=$'\n'
 mdnsResult=($(cat ${expectFile} | /usr/bin/expect -f - ))
 
+# filter through mDNS results we have and get what we really want. dns-sd is not great for scripting...
 checkforTXT=0
 proxyProtocol="http"
 for (( i=0; i<${#mdnsResult[@]}; i++ )); do
+  # if we had previously found a server - we need to get the associated TXT values
 	if [ "$checkforTXT" -eq "1" ]; then
+    # get what protocol we shoudl use and the root munki repo path
 		proxyProtocol=`echo ${mdnsResult[i]} | awk '{print $1}' | cut -d '=' -f2`
 		proxyPath=`echo ${mdnsResult[i]} | awk '{print $2}' | cut -d '=' -f2 | tr -d '\r'`
 		# exit loop
 		i=${#mdnsResult[@]}
 	fi
 	line=`echo ${mdnsResult[i]} | grep "reached at"`
+  # if we have a valid server result, lets process...
 	if [[ ${line} ]]; then
 		location=`echo "${line}" | sed 's/^.*reached at //' | cut -d' ' -f1`
 		# set trigger to check next line for more info
@@ -32,9 +46,9 @@ for (( i=0; i<${#mdnsResult[@]}; i++ )); do
 done
 
 if [[ ${location} ]]; then
-	# we returned a local proxy location
+	# we returned a local proxy location - lets set our repo
 	repoURL=${proxyProtocol}://${location}${proxyPath}
-	
+
 	# check for accessibility
 	proxyThere=`curl -s -S -m 10 "$repoURL"/catalogs/ 2>/dev/null`
 	if [[ "$proxyThere" != *"Forbidden"* ]]; then
@@ -42,6 +56,7 @@ if [[ ${location} ]]; then
 		echo "(munki proxy-check): proxy fails accessibility check..."
 	else
 		# local proxy is accessible
+    processSUS=1
 		echo "(munki proxy-check): proxy accessible!"
 		# check to see if our prefs are already correct or not
 		if [[ ${currentRepo} == ${repoURL} ]]; then
@@ -50,23 +65,70 @@ if [[ ${location} ]]; then
 			# make the config changes
 			defaults write /Library/Preferences/ManagedInstalls SoftwareRepoURL "$repoURL"
 			defaults write /Library/Preferences/ManagedInstalls SoftwareRepoURL2 "$currentRepo"
-			echo "(munki proxy-check): SETTING current repo = $repoURL // failback repo = $currentRepo"
+			echo "(munki proxy-check): SETTING current repo = $repoURL || failback repo = $currentRepo"
 		fi
-		exit 0
+    # we still need to process apple SUS
+    repoGood=1
 	fi
+
+  # Apple SUS processing
+  if [[ ${processSUS} ]]; then
+    # we suceeded with proxy tests before - so lets look at SUS
+
+    # do we have a branch specified in the current URL?
+    if [[ ${SUSbranch} ]]; then
+      SUSbranch="_$SUSbranch"
+    fi
+    # lets calculate what URL we should be using
+    susURL="${proxyProtocol}://${location}/index${SUSbranch}.sucatalog"
+
+    # check for accessibility
+    proxyThere=`curl -A "$userAgent" -I -L "$susURL" 2>/dev/null | head -n 1 | cut -d$' ' -f2`
+    if [[ "$proxyThere" == "200" ]]; then
+      # proxy returned a good result when trying to pull our catalog
+      # do we already match?
+      if [[ ${susURL} == ${currentSUS} ]]; then
+        echo "(munki proxy-check): no changes to Apple SUS - we are already using local proxy."
+      else
+        # make the config changes
+        defaults write /Library/Preferences/com.apple.SoftwareUpdate CatalogURL "$susURL"
+  			defaults write /Library/Preferences/com.apple.SoftwareUpdate CatalogURL2 "$currentSUS"
+        echo "(munki proxy-check): SETTING Apple SUS CatalogURL = $susURL || failback CatalogURL = $currentSUS"
+      fi
+      # set variable so we dont undo this later
+      SUSgood=1
+    else
+      echo "(munki proxy-check): proxy fails Apple SUS accessibility check..."
+      # local proxy not accessible - lets continue processing below...
+    fi
+  fi
 else
 	# no proxy!
 	echo "(munki proxy-check): no proxy server detected."
 fi
 
 # we could be here because a proxy server is no longer detected and we need to fix prefs or that a proxy is failing accessibility checks... or we just dont proxy
-if [[ ${alternateRepo} ]]; then
-	# we have an alternate specified - lets fall-back
-	defaults write /Library/Preferences/ManagedInstalls SoftwareRepoURL "$alternateRepo"
-	defaults delete /Library/Preferences/ManagedInstalls SoftwareRepoURL2
-	echo "(munki proxy-check): SETTING current repo = $alternateRepo // replacing $currentRepo"
-else
-	echo "(munki proxy-check): no changes."
+# lets revert to alternate URLs if we have them and we havent already changed them in this script above
+if [[ -z ${repoGood} ]]; then
+  if [[ ${alternateRepo} ]]; then
+  	# we have an alternate specified - lets fall-back
+  	defaults write /Library/Preferences/ManagedInstalls SoftwareRepoURL "$alternateRepo"
+  	defaults delete /Library/Preferences/ManagedInstalls SoftwareRepoURL2
+  	echo "(munki proxy-check): SETTING current repo = $alternateRepo || replacing $currentRepo"
+  else
+  	echo "(munki proxy-check): no repo changes."
+  fi
+fi
+
+if [[ -z ${SUSgood} ]]; then
+  if [[ ${alternateSUS} ]]; then
+  	# we have an alternate SUS specified - lets fall-back
+  	defaults write /Library/Preferences/com.apple.SoftwareUpdate CatalogURL "$alternateSUS"
+  	defaults delete /Library/Preferences/com.apple.SoftwareUpdate CatalogURL2
+    echo "(munki proxy-check): SETTING Apple SUS CatalogURL = $alternateSUS || replacing $currentSUS"
+  else
+  	echo "(munki proxy-check): no SUS changes."
+  fi
 fi
 
 exit 0
