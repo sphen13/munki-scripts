@@ -25,6 +25,10 @@
 	</array>
 	<key>description</key>
 	<string>Installs macOS version 10.13.2</string>
+	<key>category</key>
+	<string>Operating Systems</string>
+	<key>developer</key>
+	<string>Apple</string>
 	<key>display_name</key>
 	<string>Install macOS High Sierra</string>
 	<key>installed_size</key>
