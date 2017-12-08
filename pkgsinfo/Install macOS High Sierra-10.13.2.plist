@@ -24,17 +24,17 @@
 		<string>testing</string>
 	</array>
 	<key>description</key>
-	<string>Installs macOS version 10.13.1</string>
+	<string>Installs macOS version 10.13.2</string>
 	<key>display_name</key>
 	<string>Install macOS High Sierra</string>
 	<key>installed_size</key>
 	<integer>9227469</integer>
 	<key>installer_item_hash</key>
-	<string>05ce745848eca6960b84208c1a20fe36a75bbc937928ccaa96cc1d46c68a826d</string>
+	<string>3d18bdca58cefe1eba5ef947e94d1ad29a09209fccd4d34ad90184b853f6f101</string>
 	<key>installer_item_location</key>
-	<string>Install macOS High Sierra-10.13.1.dmg</string>
+	<string>Install macOS High Sierra-10.13.2.dmg</string>
 	<key>installer_item_size</key>
-	<integer>5079688</integer>
+	<integer>5078257</integer>
 	<key>installer_type</key>
 	<string>startosinstall</string>
 	<key>minimum_munki_version</key>
@@ -46,7 +46,7 @@
 	<key>uninstallable</key>
 	<false/>
 	<key>version</key>
-	<string>10.13.1</string>
+	<string>10.13.2</string>
   <key>maximum_os_version</key>
   <string>10.12.99</string>
   <key>installable_condition</key>
