@@ -1,0 +1,8 @@
+#!/bin/sh
+## postinstall
+
+# reload
+launchctl unload /Library/LaunchDaemons/computer-to-hostname.plist
+launchctl load -w /Library/LaunchDaemons/computer-to-hostname.plist
+
+exit 0
