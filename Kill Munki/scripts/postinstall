@@ -1,0 +1,6 @@
+#!/bin/sh
+
+launchctl unload -w /Library/LaunchDaemons/Kill_Munki.plist
+launchctl load -w /Library/LaunchDaemons/Kill_Munki.plist
+
+exit 0

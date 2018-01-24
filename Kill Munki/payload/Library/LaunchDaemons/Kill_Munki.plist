@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC -//Apple Computer//DTD PLIST 1.0//EN http://www.apple.com/DTDs/PropertyList-1.0.dtd >
+<plist version="1.0">
+<dict>
+	<key>Label</key>
+	<string>Kill_Munki</string>
+	<key>ProgramArguments</key>
+	<array>
+		<string>/Library/Scripts/Kill_Munki.sh</string>
+	</array>
+	<key>RunAtLoad</key>
+	<true/>
+	<key>KeepAlive</key>
+	<false/>
+	<key>AbandonProcessGroup</key>
+	<true/>
+</dict>
+</plist>
