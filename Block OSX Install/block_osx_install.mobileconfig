@@ -21,8 +21,8 @@
 		  <true/>
 		  <key>pathBlackList</key>
 		  <array>
-			  <string>/Applications/Install macOS High Sierra Beta.app</string>
-			  <string>/Applications/Install macOS High Sierra.app</string>
+			  <string>/Applications/Install macOS Mojave Beta.app</string>
+			  <string>/Applications/Install macOS Mojave.app</string>
 		  </array>
 		  <key>pathWhiteList</key>
 		  <array>
@@ -67,7 +67,7 @@
     <key>PayloadIdentifier</key>
     <string>com.trmacs.block_osx_install</string>
     <key>PayloadOrganization</key>
-    <string>Technology Revealed</string>
+    <string></string>
     <key>PayloadRemovalDisallowed</key>
     <false/>
     <key>PayloadType</key>

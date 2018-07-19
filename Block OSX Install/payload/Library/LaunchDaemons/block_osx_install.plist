@@ -13,8 +13,8 @@
 		</array>
 		<key>WatchPaths</key>
 		<array>
-			<string>/Applications/Install macOS High Sierra.app/</string>
-			<string>/Applications/Install macOS High Sierra Beta.app/</string>
+			<string>/Applications/Install macOS Mojave.app/</string>
+			<string>/Applications/Install macOS Mojave Beta.app/</string>
 		</array>
 </dict>
 </plist>
