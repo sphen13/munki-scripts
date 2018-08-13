@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>RestartAction</key>
+	<string>RequireRestart</string>
+	<key>_metadata</key>
+	<dict>
+		<key>created_by</key>
+		<string>sphen</string>
+		<key>creation_date</key>
+		<date>2018-08-13T15:37:28Z</date>
+		<key>munki_version</key>
+		<string>3.3.1.3537</string>
+		<key>os_version</key>
+		<string>10.13.6</string>
+	</dict>
+	<key>apple_item</key>
+	<true/>
+	<key>autoremove</key>
+	<false/>
+	<key>catalogs</key>
+	<array>
+		<string>testing</string>
+	</array>
+	<key>description</key>
+	<string>Installs macOS version 10.13.6</string>
+	<key>category</key>
+	<string>Operating Systems</string>
+	<key>developer</key>
+	<string>Apple</string>
+	<key>display_name</key>
+	<string>Install macOS High Sierra</string>
+	<key>installed_size</key>
+	<integer>14994636</integer>
+	<key>installer_item_hash</key>
+	<string>e92e8834e80abd4a941d0f84f40c7d2fc7df3e679fa278241828fde92124970b</string>
+	<key>installer_item_location</key>
+	<string>Install macOS High Sierra-10.13.6.dmg</string>
+	<key>installer_item_size</key>
+	<integer>5101797</integer>
+	<key>installer_type</key>
+	<string>startosinstall</string>
+	<key>minimum_munki_version</key>
+	<string>3.0.0.3211</string>
+	<key>minimum_os_version</key>
+	<string>10.8</string>
+	<key>name</key>
+	<string>Install_macOS_High_Sierra</string>
+	<key>uninstallable</key>
+	<false/>
+	<key>version</key>
+	<string>10.13.6</string>
+  <key>maximum_os_version</key>
+  <string>10.12.99</string>
+  <key>installable_condition</key>
+  <string>(os_vers_minor &lt;= 12 AND os_vers_minor &gt;= 8) AND (machine_model != &quot;MacBookPro4,1&quot; AND machine_model != &quot;MacPro2,1&quot; AND machine_model != &quot;MacBookPro5,1&quot; AND machine_model != &quot;MacBookPro1,1&quot; AND machine_model != &quot;MacBookPro5,3&quot; AND machine_model != &quot;MacBookPro5,2&quot; AND machine_model != &quot;iMac8,1&quot; AND machine_model != &quot;MacBookPro5,4&quot; AND machine_model != &quot;iMac5,1&quot; AND machine_model != &quot;iMac5,2&quot; AND machine_model != &quot;iMac6,1&quot; AND machine_model != &quot;MacBookPro3,1&quot; AND machine_model != &quot;MacBookPro1,2&quot; AND machine_model != &quot;iMac9,1&quot; AND machine_model != &quot;Macmini3,1&quot; AND machine_model != &quot;Macmini1,1&quot; AND machine_model != &quot;iMac4,2&quot; AND machine_model != &quot;MacBookPro2,2&quot; AND machine_model != &quot;MacBookPro2,1&quot; AND machine_model != &quot;MacBook3,1&quot; AND machine_model != &quot;MacBook5,1&quot; AND machine_model != &quot;MacBook5,2&quot; AND machine_model != &quot;MacBook2,1&quot; AND machine_model != &quot;iMac4,1&quot; AND machine_model != &quot;MacBook1,1&quot; AND machine_model != &quot;MacBookPro5,5&quot; AND machine_model != &quot;Xserve2,1&quot; AND machine_model != &quot;MacBookAir1,1&quot; AND machine_model != &quot;Xserve3,1&quot; AND machine_model != &quot;MacBookAir2,1&quot; AND machine_model != &quot;Xserve1,1&quot; AND machine_model != &quot;Macmini2,1&quot; AND machine_model != &quot;MacPro3,1&quot; AND machine_model != &quot;iMac7,1&quot; AND machine_model != &quot;MacBook4,1&quot; AND machine_model != &quot;MacPro1,1&quot; AND machine_model != &quot;MacPro4,1&quot;)</string>
+  <key>installcheck_script</key>
+  <string>#!/bin/bash
+#######################
+# This script checks if the current system is compatible with OS X 10.13 Sierra
+#
+# The checks used in this script are:
+# - Machine has a specific supported board-id and model or is a virtual machine
+# - At least 2 GB of memory
+# - At least 14.5GB free space
+# - Current System is not identified as a server by Gruntwork
+# - Current System has an existing Recovery Partition
+#
+# Exit codes:
+# 0 = High Sierra is supported
+# 1 = High Sierra is not supported
+#
+# Updated for 10.13 by sphen.  Thanks to the mystery man who built this originally:
+# Kuddos to Hannes Juutilainen for the original python version of this that I converted because I hate python.
+# And kuddos to Nathan Felton
+#
+#Check that we&apos;re not already running High Sierra (as a backup the pkgsinfo logic)
+minorVers=$(sw_vers -productVersion | awk -F &apos;.&apos; &apos;{print $2}&apos;)
+if [ $minorVers -ge 13 ]; then
+  echo &quot;OS Upgrade Failed: Already running 10.13 or newer&quot;
+  exit 1
+fi
+
+#### Board compatibility check
+# Board list
+declare -a boardList=(Mac-06F11F11946D27C5 Mac-031B6874CF7F642A Mac-A5C67F76ED83108C Mac-CAD6701F7CEA0921 Mac-50619A408DB004DA Mac-F22C8AC8 Mac-B809C3757DA9BB8D Mac-AFD8A9D944EA4843 Mac-F2268DC8 Mac-942B59F58194171B Mac-27ADBB7B4CEE8E61 Mac-F305150B0C7DEEEF Mac-35C1E88140C3E6CF Mac-77EB7D7DAF985301 Mac-2E6FAB96566FE58C Mac-473D31EABEB93F9B Mac-7BA5B2794B2CDB12 Mac-66E35819EE2D0D05 Mac-BE0E8AC46FE800CC Mac-00BE6ED71E35EB86 Mac-4B7AC7E43945597E Mac-F22C89C8 Mac-937CB26E2E02BB01 Mac-942459F5819B171B Mac-FFE5EF870D7BA81A Mac-2BD1B31983FE1663 Mac-F222BEC8 Mac-4BC72D62AD45599E Mac-4B682C642B45593E Mac-90BE64C3CB5A9AEB Mac-3CBD00234E554E41 Mac-031AEE4D24BFF0B1 Mac-66F35F19FE2A0D05 Mac-F221BEC8 Mac-B4831CEBD52A0C4C Mac-C08A6BB70A942AC2 Mac-8ED6AF5B48C039E1 Mac-FA842E06C61E91C5 Mac-FC02E91DDD3FA6A4 Mac-65CE76090165799A Mac-9AE82516C7C6B903 Mac-6F01561E16C75D06 Mac-F60DEB81FF30ACF6 Mac-81E3E92DD6088272 Mac-F2208EC8 Mac-F22586C8 Mac-189A3D4F975D5FFC Mac-942C5DF58193131B Mac-F2238BAE Mac-9F18E312C5C2BF0B Mac-C3EC7CD22292981F Mac-F221DCC8 Mac-742912EFDBEE19B3 Mac-CF21D135A7D34AA6 Mac-942452F5819B1C1B Mac-112B0A653D3AAB9C Mac-DB15BD556843C820 Mac-F22589C8 Mac-77F17D7DA9285301 Mac-F2238AC8 Mac-BE088AF8C5EB4FA2 Mac-551B86E5744E2388 Mac-35C5E08120C7EEAF Mac-F65AE981FFA204ED Mac-94245B3640C91C81 Mac-EE2EBD4B90B839A8 Mac-42FD25EABCABB274 Mac-7DF2A3B5E5D671ED Mac-F2268DAE Mac-06F11FD93F0323C5 Mac-7DF21CB3ED6977E5 Mac-A369DDC4E67F1C45 Mac-F2268CC8 Mac-94245A3940C91C80 Mac-E43C1C25D4880AD6 Mac-942B5BF58194151B)
+declare -a nonSupportedModels=(MacBookPro4,1 MacPro2,1 MacBookPro5,1 MacBookPro1,1 MacBookPro5,3 MacBookPro5,2 iMac8,1 MacBookPro5,4 iMac5,1 iMac5,2 iMac6,1 MacBookPro3,1 MacBookPro1,2 iMac9,1 Macmini3,1 Macmini1,1 iMac4,2 MacBookPro2,2 MacBookPro2,1 MacBook3,1 MacBook5,1 MacBook5,2 MacBook2,1 iMac4,1 MacBook1,1 MacBookPro5,5 Xserve2,1 MacBookAir1,1 Xserve3,1 MacBookAir2,1 Xserve1,1 Macmini2,1 MacPro3,1 iMac7,1 MacBook4,1 MacPro1,1 MacPro4,1)
+vmCheck=$(/usr/sbin/sysctl -n machdep.cpu.features | grep VMM 2&gt;/dev/null)
+if [ -z &quot;$vmCheck&quot; ]; then
+	#check model
+	hwmodel=$(sysctl -n hw.model)
+	modelGood=yes
+	for model in &quot;${nonSupportedModels[@]}&quot;; do
+		if [[ &quot;$hwmodel&quot; == &quot;$model&quot; ]]; then
+			modelGood=no
+			break
+		fi
+	done
+	if [ &quot;$modelGood&quot; != &quot;yes&quot; ]; then
+		echo &quot;OS Upgrade Failed: Unsupported model.&quot;
+		exit 1
+	fi
+
+  #Model ok, check board list
+  #check board
+  boardID=$(/usr/sbin/ioreg -p IODeviceTree -r -n / -d 1 | grep board-id | awk -F &apos;&quot;&apos; &apos;{print $4}&apos;)
+  boardGood=no
+  for board in &quot;${boardList[@]}&quot;; do
+    if [[ &quot;$boardID&quot; == &quot;$board&quot; ]]; then
+      boardGood=yes
+      break
+    fi
+  done
+  if [ &quot;$boardGood&quot; != &quot;yes&quot; ]; then
+    echo &quot;OS Upgrade Failed: Unsupported logicboard.&quot;
+    exit 1
+  fi
+fi
+#### Required memory check
+installedRAM=$(/usr/sbin/sysctl -n hw.memsize)
+if [ $installedRAM -lt 2147483648 ]; then
+  echo &quot;OS Upgrade Failed: Insufficient RAM&quot;
+  exit 1
+fi
+#### Not a server check
+gwIsServer=$(/usr/bin/defaults read /Library/Mac-MSP/Gruntwork/settings server)
+if [ &quot;$gwIsServer&quot; == 1 ]; then
+  echo &quot;OS Upgrade Failed: This machine is tagged as a Server.&quot;
+  exit 1
+fi
+#### Recovery partition check
+if (( &quot;$minorVers&quot; != 6 )); then
+  recoveryCheck=$(diskutil list | grep &quot;Recovery HD&quot; 2&gt;/dev/null)
+  if [ $? -ne 0 ]; then
+    echo &quot;OS Upgrade Failed: No existing Recovery Partition&quot;
+    exit 1
+  fi
+  if [ -z &quot;$recoveryCheck&quot; ]; then
+    echo &quot;OS Upgrade Failed: No existing Recovery Partition&quot;
+    exit 1
+  fi
+fi
+#### Free space check
+diskutil_plist=&quot;$(mktemp -t &quot;diskutil&quot;).plist&quot;
+diskutil info -plist / &gt; ${diskutil_plist}
+freespace=$(defaults read &quot;${diskutil_plist}&quot; FreeSpace)
+rm &quot;${diskutil_plist}&quot;
+freespace=$(expr $freespace / $((1024**2)))
+if (( ${freespace} &lt; 14848 )); then
+	echo &quot;OS Upgrade Failed: Less than 14.5GB free space&quot;
+	exit 1
+fi
+exit 0</string>
+</dict>
+</plist>
