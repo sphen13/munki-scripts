@@ -18,7 +18,7 @@ if [[ -z ${networkInterface} ]]; then
 	# no action
 	exit 0
 else
-	networkService=`/usr/sbin/networksetup -listnetworkserviceorder | grep ${networkInterface} | cut -d: -f2 | cut -d, -f1 | tr -d '[:space:]' 2>/dev/null`
+	networkService=`/usr/sbin/networksetup -listnetworkserviceorder | grep ${networkInterface} | cut -d: -f2 | awk -F, 'BEGIN{FS=OFS=","}NF{NF-=1} $1=$1' | awk '{$1=$1};1' 2>/dev/null`
 fi
 
 if [[ -z ${networkService} ]]; then
