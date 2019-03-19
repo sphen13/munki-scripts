@@ -1,12 +1,12 @@
 PKGTITLE="outset-nomad_update"
-PKGVERSION="1.0.0"
+PKGVERSION="1.0.1"
 PKGID=com.github.outset.nomad_update
 PROJECT="outset-nomad_update"
 
 #################################################
 
 ##Help - Show this help menu
-help: 
+help:
 	@fgrep -h "##" $(MAKEFILE_LIST) | fgrep -v fgrep | sed -e 's/\\$$//' | sed -e 's/##//'
 
 ##  clean - Clean up temporary working directories
