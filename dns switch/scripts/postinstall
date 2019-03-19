@@ -1,0 +1,7 @@
+#!/bin/sh
+
+# reload
+launchctl unload -w /Library/LaunchDaemons/dns_switch.plist
+launchctl load -w /Library/LaunchDaemons/dns_switch.plist
+
+exit 0
