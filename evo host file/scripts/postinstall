@@ -1,0 +1,7 @@
+#!/bin/sh
+
+# reload
+launchctl unload -w /Library/LaunchDaemons/evo-host.plist
+launchctl load -w /Library/LaunchDaemons/evo-host.plist
+
+exit 0
